@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Fado Anthology for Wan-Xin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', 'Garamond', serif;
+            line-height: 1.8;
+            color: #2c2c2c;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        }
+        
+        header {
+            background: linear-gradient(135deg, #8b0000 0%, #dc143c 50%, #a52a2a 100%);
+            color: #f5f5f5;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><path d="M0,300 Q300,200 600,300 T1200,300" stroke="rgba(255,255,255,0.1)" stroke-width="2" fill="none"/></svg>');
+            opacity: 0.1;
+        }
+        
+        header h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            font-size: 1.3em;
+            font-style: italic;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 20px;
+        }
+        
+        .header-image {
+            max-width: 100%;
+            height: auto;
+            max-height: 350px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .intro-section {
+            background: white;
+            padding: 60px 40px;
+            max-width: 1000px;
+            margin: -30px auto 60px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            position: relative;
+            z-index: 2;
+            line-height: 2;
+            font-size: 1.05em;
+            color: #1a1a1a;
+        }
+        
+        .intro-section h2 {
+            color: #8b0000;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        
+        .intro-section p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        .family-stats {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #8b0000;
+        }
+        
+        .stat-item {
+            margin: 10px 0;
+            font-size: 1.05em;
+        }
+        
+        .stat-highlight {
+            font-weight: 700;
+            color: #8b0000;
+        }
+        
+        .playlist-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #8b0000, #dc143c);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1em;
+            margin: 20px 0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(139, 0, 0, 0.3);
+        }
+        
+        .playlist-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(139, 0, 0, 0.5);
+        }
+        
+        .playlist-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .song-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .song-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .song-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        }
+        
+        .song-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #8b0000, #dc143c);
+            filter: grayscale(100%) contrast(1.1);
+        }
+        
+        .song-content {
+            padding: 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .song-title {
+            font-size: 1.8em;
+            color: #8b0000;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .song-artist {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        
+        .song-description {
+            font-size: 0.95em;
+            line-height: 1.8;
+            color: #2c2c2c;
+            flex-grow: 1;
+            margin-bottom: 15px;
+        }
+        
+        .song-quote {
+            font-size: 0.9em;
+            font-style: italic;
+            color: #666;
+            margin: 10px 0;
+            padding-left: 15px;
+            border-left: 3px solid #8b0000;
+        }
+        
+        .song-details {
+            border-top: 2px solid #e0e0e0;
+            padding-top: 15px;
+            font-size: 0.85em;
+            color: #666;
+        }
+        
+        .detail-row {
+            margin-bottom: 8px;
+        }
+        
+        .detail-label {
+            font-weight: 700;
+            color: #8b0000;
+        }
+        
+        footer {
+            background: #1a1a1a;
+            color: #f5f5f5;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+            border-top: 3px solid #8b0000;
+        }
+        
+        footer p {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin: 8px 0;
+        }
+        
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #8b0000, transparent);
+            margin: 40px 0;
+        }
+        
+        .heart {
+            color: #dc143c;
+            font-size: 1.2em;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+            
+            .intro-section {
+                padding: 30px 20px;
+                margin: -20px 20px 40px;
+            }
+            
+            .song-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .playlist-button {
+                padding: 12px 24px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎵 A Fado Anthology for Wan-Xin 🎵</h1>
+        <p class="subtitle">A Love Letter to My Heart, on Her 46th Birthday</p>
+        <img src="header.jpg" alt="Family Photo - Ayan, Wan-Xin, Kavi, and Ava" class="header-image">
+    </header>
+    
+    <div class="container">
+        <div class="intro-section">
+            <h2><span class="heart">❤️</span> My Dearest Wan-Xin</h2>
+            
+            <p>Seventeen years. Since 2008, we've built a life together—one filled with love, laughter, two beautiful children, and adventures across continents. And now, on your 46th birthday, we celebrate this milestone in a place we've chosen as our new home: Portugal, the land of fado.</p>
+            
+            <p>I wanted to create something that speaks to what I see in you every day—your deep appreciation for beauty, emotion, and artistry. Your love for fado has always resonated with me because it mirrors what I feel for you: a profound longing, a celebration of joy, a tribute to resilience, and the understanding that life's deepest moments often contain both sorrow and hope.</p>
+            
+            <div class="family-stats">
+                <h3 style="color: #8b0000; margin-bottom: 15px;">Our Story</h3>
+                <div class="stat-item"><span class="stat-highlight">Together since:</span> 2008</div>
+                <div class="stat-item"><span class="stat-highlight">Our beautiful children:</span> Kavi (14) and Ava (11)</div>
+                <div class="stat-item"><span class="stat-highlight">Your birthday:</span> 46 today</div>
+                <div class="stat-item"><span class="stat-highlight">Our newest chapter:</span> First birthday in Cascais, Portugal</div>
+            </div>
+            
+            <p>This playlist is not just a collection of songs—it's a journey through the heart of fado, the soul of Portugal, and ultimately, a reflection of what you mean to me. Each track has been chosen to represent the full spectrum of emotion that defines both fado and our life together: the melancholy of missing what we've left behind in New York, the joy of discovering beauty in our new home, the strength that binds us as a family, and the tender moments that make a life worth living.</p>
+            
+            <p>These nine masterpieces will eventually arrive on vinyl—a tangible, playable reminder that some things, like our love, deserve to be felt in their purest form.</p>
+            
+            <p style="margin-top: 30px; font-style: italic; font-weight: 700;">Happy 46th birthday, my love. This one's for you. <span class="heart">❤️</span></p>
+            <p style="font-style: italic;">— Ayan</p>
+            
+            <div class="playlist-section">
+                <p style="font-size: 1.1em; margin: 20px 0;">You can listen to this playlist now on Apple Music:</p>
+                <a href="https://music.apple.com/us/playlist/best-of-fado-for-wan-xins-birthday-2025/pl.u-DdANrRBt0rYKyzM" target="_blank" class="playlist-button">🎵 Listen on Apple Music</a>
+            </div>
+        </div>
+        
+        <h2 style="text-align: center; color: #8b0000; margin: 60px 0 40px; font-size: 2em;">The Nine Songs</h2>
+        
+        <div class="song-grid">
+            <!-- Song 1: Barco Negro -->
+            <div class="song-card">
+                <img src="https://pplx-res.cloudinary.com/image/upload/v1762717248/pplx_project_search_images/d4ea8c5935334315fc24162615596ff0116d262b.png" alt="Amália Rodrigues - Barco Negro" class="song-image">
+                <div class="song-content">
+                    <div class="song-title">Barco Negro</div>
+                    <div class="song-artist">Amália Rodrigues</div>
+                    <div class="song-description">Our journey begins with Amália, the Queen of Fado, and her haunting masterpiece. "Barco Negro" embodies saudade—that uniquely Portuguese yearning that captures what we all feel when facing life's deepest longings. Like a black boat drifting through dark waters, this song speaks to the inevitable melancholy that comes with love: the fear of loss, the ache of distance, the depth of commitment. Amália's voice is a mirror to the soul.</div>
+                    <div class="song-quote">"Barco Negro" — where longing finds its voice</div>
+                    <div class="song-details">
+                        <div class="detail-row"><span class="detail-label">Composer:</span> Frederico de Brito</div>
+                        <div class="detail-row"><span class="detail-label">Length:</span> 4:11</div>
+                        <div class="detail-row"><span class="detail-label">Why I chose it:</span> For the depth of emotion that transcends time</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Song 2: Fado Corrido -->
+            <div class="song-card">
+                <img src="https://pplx-res.cloudinary.com/image/upload/v1762716891/pplx_project_search_images/65101a67ff8e59f4229017d8bf34c1cab6c89883.png" alt="Fado Corrido Performance" class="song-image">
+                <div class="song-content">
+                    <div class="song-title">Fado Corrido</div>
+                    <div class="song-artist">Maria Teresa de Noronha</div>
+                    <div class="song-description">But life is not all sorrow—it's also rhythm, vitality, and joy. "Fado Corrido" breaks through the melancholy with a spirited beat that reminds us that hope exists even in fado's most traditional form. I think of the kids dancing around our new home in Cascais, your smile when we found the perfect place to call home, the lightness that comes after a storm. This song celebrates that resilience.</div>
+                    <div class="song-quote">Rhythm and life, the other side of fado</div>
+                    <div class="song-details">
+                        <div class="detail-row"><span class="detail-label">Composer:</span> Traditional</div>
+                        <div class="detail-row"><span class="detail-label">Length:</span> 2:38</div>
+                        <div class="detail-row"><span class="detail-label">Why I chose it:</span> For the moments that make us smile</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Song 3: Ó Gente Da Minha Terra -->
+            <div class="song-card">
+                <img src="https://pplx-res.cloudinary.com/image/upload/v1762716870/pplx_project_search_images/087d852362286eff2f3688157d841031354cb307.png" alt="Mariza - Ó Gente Da Minha Terra" class="song-image">
+                <div class="song-content">
+                    <div class="song-title">Ó Gente Da Minha Terra</div>
+                    <div class="song-artist">Mariza</div>
+                    <div class="song-description">Mariza's powerful voice celebrates "the people of my land," and as I listen, I think of us—our people, our family. You, Kavi, Ava, and me, finding our place in Cascais. This is our first birthday here, our first Portuguese celebration, our first moment of truly belonging to this beautiful country. Mariza reminds us that home is not a place; it's the people we love and the bonds we've built together.</div>
+                    <div class="song-quote">Our people, our land, our home</div>
+                    <div class="song-details">
+                        <div class="detail-row"><span class="detail-label">Composer:</span> Jorge Fernando</div>
+                        <div class="detail-row"><span class="detail-label">Length:</span> 4:02</div>
+                        <div class="detail-row"><span class="detail-label">Why I chose it:</span> For the first birthday in our new home</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Song 4: Estranha Forma de Vida -->
+            <div class="song-card">
+                <img src="https://pplx-res.cloudinary.com/image/upload/v1762716871/pplx_project_search_images/93ebb12ed951dd904d7078f3ef0e8c7cb9ca5172.png" alt="Amália Rodrigues - Estranha Forma de Vida" class="song-image">
+                <div class="song-content">
+                    <div class="song-title">Estranha Forma de Vida</div>
+                    <div class="song-artist">Amália Rodrigues</div>
+                    <div class="song-description">"A Strange Way of Life"—these words capture something profound. Our life has been unconventional in many ways: moving across oceans, building a career, raising two incredible children, starting over in a new country. Yet through it all, what remains constant is you. Amália's self-composed masterpiece speaks to the complexity of human emotion—how love and loss, joy and sorrow, are often intertwined. This strange way of life we've chosen together is the most beautiful journey.</div>
+                    <div class="song-quote">Life's complexity, love's constancy</div>
+                    <div class="song-details">
+                        <div class="detail-row"><span class="detail-label">Composer:</span> Amália Rodrigues</div>
+                        <div class="detail-row"><span class="detail-label">Length:</span> 3:00</div>
+                        <div class="detail-row"><span class="detail-label">Why I chose it:</span> For our unconventional, beautiful life together</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Song 5: Lisboa Menina e Moça -->
+            <div class="song-card">
+                <img src="https://pplx-res.cloudinary.com/image/upload/v1762716870/pplx_project_search_images/6545ddcb7a2afb094d0bc3f979ec3404615154b7.png" alt="Carlos do Carmo - Lisboa Menina e Moça" class="song-image">
+                <div class="song-content">
+                    <div class="song-title">Lisboa Menina e Moça</div>
+                    <div class="song-artist">Carlos do Carmo</div>
+                    <div class="song-description">Carlos do Carmo sings of Lisbon as a girl and as a woman—a city with history, complexity, beauty, and soul. In the same way, I see you: a woman of many layers, experiences, and depths. Your 46 years are a testament to the grace with which you've lived, loved, and led our family. Lisbon welcomes us now, and its beauty mirrors the elegance I see in you every single day.</div>
+                    <div class="song-quote">A city of beauty; a woman of grace</div>
+                    <div class="song-details">
+                        <div class="detail-row"><span class="detail-label">Composer:</span> Alain Oulman</div>
+                        <div class="detail-row"><span class="detail-label">Length:</span> 3:25</div>
+                        <div class="detail-row"><span class="detail-label">Why I chose it:</span> For the city we now call home, and for you</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Song 6: Ai Mouraria -->
+            <div class="song-card">
+                <img src="https://pplx-res.cloudinary.com/image/upload/v1762716870/pplx_project_search_images/390e5a30b81b3d36d06b68ef0b10de0c996eda48.png" alt="Camané - Ai Mouraria" class="song-image">
+                <div class="song-content">
+                    <div class="song-title">Ai Mouraria</div>
+                    <div class="song-artist">Amália Rodrigues</div>
+                    <div class="song-description">Mouraria, one of Lisbon's oldest neighborhoods, pulses with life and history. This song celebrates community, resilience, and the vibrancy of ordinary people living extraordinary lives. That's us, too. We're not famous or powerful, but we're deeply, beautifully alive. Our home, our neighborhood, our daily rituals with Kavi and Ava—these are the threads that weave meaning into our lives. Amália reminds us to celebrate this simple, precious existence.</div>
+                    <div class="song-quote">In ordinary moments, life's true beauty unfolds</div>
+                    <div class="song-details">
+                        <div class="detail-row"><span class="detail-label">Composer:</span> Frederico de Brito</div>
+                        <div class="detail-row"><span class="detail-label">Length:</span> 2:35</div>
+                        <div class="detail-row"><span class="detail-label">Why I chose it:</span> For our daily life together, the richest gift</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Song 7: Canção do Mar -->
+            <div class="song-card">
+                <img src="https://pplx-res.cloudinary.com/image/upload/v1762716892/pplx_project_search_images/50083338598d977e506870c1e6cd8d81589cf2af.png" alt="Dulce Pontes - Canção do Mar" class="song-image">
+                <div class="song-content">
+                    <div class="song-title">Canção do Mar</div>
+                    <div class="song-artist">Dulce Pontes</div>
+                    <div class="song-description">Dulce Pontes reaches beyond Portugal's borders with this haunting ode to the sea—and by extension, to longing that transcends geography. We've crossed oceans together, left behind what we knew, and arrived at this moment on the Portuguese coast. The sea connects New York to Portugal, our past to our present. Dulce's dramatic voice captures the bittersweet beauty of journeys taken, of leaving and arriving, of forever being changed by the places we've called home.</div>
+                    <div class="song-quote">Across oceans, through time, love remains</div>
+                    <div class="song-details">
+                        <div class="detail-row"><span class="detail-label">Composer:</span> Frederico de Brito</div>
+                        <div class="detail-row"><span class="detail-label">Length:</span> 5:16</div>
+                        <div class="detail-row"><span class="detail-label">Why I chose it:</span> For every ocean we've crossed together</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Song 8: Com Que Voz -->
+            <div class="song-card">
+                <img src="https://pplx-res.cloudinary.com/image/upload/v1762716870/pplx_project_search_images/771e7715d23f684e6e914ab617f921c0390228bd.png" alt="Camané - Com Que Voz" class="song-image">
+                <div class="song-content">
+                    <div class="song-title">Com Que Voz</div>
+                    <div class="song-artist">Camané</div>
+                    <div class="song-description">Camané asks: "With what voice can one express such profound emotion?" This is how I feel about you, Wan-Xin. How do I find the words, the voice, the way to truly convey what you mean to me? Seventeen years of building a life, raising children, supporting each other through challenges and celebrations—how do I capture that in a single song? Camané's intensity, his refusal to look away from deep emotion, his commitment to authenticity—that's what I aspire to as I try to express my love.</div>
+                    <div class="song-quote">With what voice can love be truly expressed?</div>
+                    <div class="song-details">
+                        <div class="detail-row"><span class="detail-label">Composer:</span> Alain Oulman</div>
+                        <div class="detail-row"><span class="detail-label">Length:</span> 4:10</div>
+                        <div class="detail-row"><span class="detail-label">Why I chose it:</span> For everything I'm trying to say</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Song 9: Lágrima -->
+            <div class="song-card">
+                <img src="https://pplx-res.cloudinary.com/image/upload/v1762716891/pplx_project_search_images/65101a67ff8e59f4229017d8bf34c1cab6c89883.png" alt="Mariza - Lágrima" class="song-image">
+                <div class="song-content">
+                    <div class="song-title">Lágrima</div>
+                    <div class="song-artist">Mariza</div>
+                    <div class="song-description">We close with "Lágrima"—the tear. Not a tear of sadness, but of recognition. Recognition of beauty, of time's passage, of the preciousness of this moment. On your 46th birthday, I think of all the tears you've shed—of joy when our children were born, of frustration when life was difficult, of laughter at the simplest moments. These tears are the evidence of a life fully lived, deeply felt, and authentically loved. Mariza's tender voice closes our journey with dignity, grace, and the quiet understanding that the deepest emotions often require no words.</div>
+                    <div class="song-quote">In tears, we find the truth of beauty</div>
+                    <div class="song-details">
+                        <div class="detail-row"><span class="detail-label">Composer:</span> Alain Oulman</div>
+                        <div class="detail-row"><span class="detail-label">Length:</span> 2:55</div>
+                        <div class="detail-row"><span class="detail-label">Why I chose it:</span> For every moment we've truly lived</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p><strong>A Fado Anthology for Wan-Xin</strong> <span class="heart">❤️</span></p>
+        <p>Total Duration: ~32 minutes</p>
+        <p style="margin-top: 20px; font-style: italic;">This vinyl will arrive in a few weeks, but the music lives in my heart always.</p>
+        <p style="margin-top: 20px;">Happy 46th Birthday to my love, my partner, my home.</p>
+        <p style="font-weight: 700;">With all my love,<br>Ayan</p>
+        <p style="margin-top: 20px; font-size: 0.85em; opacity: 0.8;">Cascais, Portugal • November 2025</p>
+    </footer>
+</body>
+</html>
